@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D356CA02ED1FFD60093C8A0 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D356C9F2ED1FFD60093C8A0 /* Models.swift */; };
 		1D811C852ED1B69D004950EF /* SnapFocusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811C842ED1B69D004950EF /* SnapFocusApp.swift */; };
 		1D811C872ED1B69D004950EF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811C862ED1B69D004950EF /* ContentView.swift */; };
 		1D811C892ED1B69E004950EF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D811C882ED1B69E004950EF /* Assets.xcassets */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1D356C9F2ED1FFD60093C8A0 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		1D811C812ED1B69D004950EF /* SnapFocus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnapFocus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D811C842ED1B69D004950EF /* SnapFocusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapFocusApp.swift; sourceTree = "<group>"; };
 		1D811C862ED1B69D004950EF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 				1D811C842ED1B69D004950EF /* SnapFocusApp.swift */,
 				1D811CB32ED1D4B0004950EF /* CalendarManager.swift */,
 				1D811CAF2ED1BA3B004950EF /* FloatingWindow.swift */,
+				1D356C9F2ED1FFD60093C8A0 /* Models.swift */,
 				1D811CB12ED1BA68004950EF /* RulerView.swift */,
 				1D811C862ED1B69D004950EF /* ContentView.swift */,
 				1D811C882ED1B69E004950EF /* Assets.xcassets */,
@@ -205,7 +208,7 @@
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1540;
-				ORGANIZATIONNAME = 0ceanlight;
+				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					1D811C802ED1B69D004950EF = {
 						CreatedOnToolsVersion = 15.4;
@@ -274,6 +277,7 @@
 				1D811CB02ED1BA3B004950EF /* FloatingWindow.swift in Sources */,
 				1D811C872ED1B69D004950EF /* ContentView.swift in Sources */,
 				1D811C852ED1B69D004950EF /* SnapFocusApp.swift in Sources */,
+				1D356CA02ED1FFD60093C8A0 /* Models.swift in Sources */,
 				1D811CB22ED1BA68004950EF /* RulerView.swift in Sources */,
 				1D811CB42ED1D4B0004950EF /* CalendarManager.swift in Sources */,
 			);

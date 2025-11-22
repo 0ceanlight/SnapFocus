@@ -7,33 +7,66 @@
 
 import Foundation
 import EventKit
+import Combine
+import SwiftUI
 
-class CalendarManager: ObservableObject {
-    private let eventStore = EKEventStore()
+final class CalendarManager: ObservableObject {
+    private let store = EKEventStore()
+    private var timer: Timer?
+    private var notificationObserver: Any?
 
-    @Published var events: [EKEvent] = []
+    @Published private(set) var blocks: [EventBlock] = []
 
-    /// Ask user for calendar access
-    func requestAccess(completion: @escaping (Bool) -> Void) {
+    /// The calendar name to import from (SnapFocus)
+    let calendarName: String
 
-        // macOS Sonoma (14) and newer
-        if #available(macOS 14.0, *) {
-            eventStore.requestFullAccessToEvents { (granted, error) in
-                // IMPORTANT: UI updates must be done on the main thread
+    init(calendarName: String = "SnapFocus") {
+        self.calendarName = calendarName
+        start()
+    }
+
+    deinit {
+        stopTimers()
+        if let obs = notificationObserver {
+            NotificationCenter.default.removeObserver(obs)
+        }
+    }
+
+    func start() {
+        requestAccess { granted in
+            guard granted else {
+                print("SnapFocus: Calendar access denied.")
                 DispatchQueue.main.async {
-                    if granted {
-                        print("Calendar access granted.")
-                    } else {
-                        print("Calendar access denied or error: \(String(describing: error))")
-                    }
+                    self.blocks = []
+                }
+                return
+            }
+            self.fetchAndPublishToday()
+            self.setupEventStoreListener()
+            self.setupPeriodicPoll()
+        }
+    }
+
+    private func stopTimers() {
+        timer?.invalidate()
+        timer = nil
+    }
+
+    // MARK: - Permissions (Sonoma-friendly)
+    func requestAccess(completion: @escaping (Bool) -> Void) {
+        if #available(macOS 14.0, *) {
+            store.requestFullAccessToEvents { granted, error in
+                if let error = error {
+                    print("Calendar access error:", error.localizedDescription)
+                }
+                DispatchQueue.main.async {
                     completion(granted)
                 }
             }
         } else {
-            // Fallback for older macOS
-            eventStore.requestAccess(to: .event) { granted, error in
+            store.requestAccess(to: .event) { granted, error in
                 if let error = error {
-                    print("Calendar access error (legacy API):", error.localizedDescription)
+                    print("Calendar access error (legacy):", error.localizedDescription)
                 }
                 DispatchQueue.main.async {
                     completion(granted)
@@ -41,45 +74,51 @@ class CalendarManager: ObservableObject {
             }
         }
     }
-    
-    
-    /// Fetch events from all calendars in the given date range
-    func fetchEvents(
-        start: Date = Date().addingTimeInterval(-86400),
-        end: Date = Date().addingTimeInterval(86400 * 7)
-    ) {
-        let predicate = eventStore.predicateForEvents(
-            withStart: start,
-            end: end,
-            calendars: nil
-        )
 
-        let results = eventStore.events(matching: predicate)
-            .sorted(by: { $0.startDate < $1.startDate })
-
-        DispatchQueue.main.async {
-            self.events = results
-            self.printEvents(results)
+    // MARK: - Watch for external calendar changes
+    private func setupEventStoreListener() {
+        notificationObserver = NotificationCenter.default.addObserver(
+            forName: .EKEventStoreChanged,
+            object: store,
+            queue: OperationQueue.main
+        ) { [weak self] _ in
+            self?.fetchAndPublishToday()
         }
     }
 
+    // fallback poll every 10s
+    private func setupPeriodicPoll() {
+        stopTimers()
+        timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
+            self?.fetchAndPublishToday()
+        }
+        RunLoop.main.add(timer!, forMode: .common)
+    }
 
-    /// Utility function to print events to console
-    private func printEvents(_ events: [EKEvent]) {
-        print("\n--- SnapFocus — Found \(events.count) calendar events ---")
+    // MARK: - Fetch only today's events
+    // TODO: fetch others also?
+    func fetchAndPublishToday() {
+        let now = Date()
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: now)
+        guard let endOfDay = calendar.date(byAdding: DateComponents(day: 1, second: -1), to: startOfDay) else {
+            return
+        }
 
-        for event in events {
-            let start = event.startDate?.description ?? "N/A"
-            let end   = event.endDate?.description ?? "N/A"
-            
-            print("""
-                \(event.title ?? "(untitled)")
-                • Start: \(start)
-                • End:   \(end)
-                • Calendar: \(event.calendar.title)
-                • Location: \(event.location ?? "(none)")
-                --------------------------------------
-                """)
+        // find calendars with matching title
+        let calendars = store.calendars(for: .event).filter { $0.title == calendarName }
+        guard !calendars.isEmpty else {
+            DispatchQueue.main.async { self.blocks = [] }
+            return
+        }
+
+        let predicate = store.predicateForEvents(withStart: startOfDay, end: endOfDay, calendars: calendars)
+        let events = store.events(matching: predicate)
+
+        let newBlocks = EventBlock.assignColorsOrdered(events: events)
+
+        DispatchQueue.main.async {
+            self.blocks = newBlocks
         }
     }
 }
