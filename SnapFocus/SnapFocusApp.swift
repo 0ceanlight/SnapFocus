@@ -23,7 +23,7 @@ struct SnapFocusApp: App {
         // This is a bit of a hack to remove the default "new window" command
         // that shows up when you have a WindowGroup.
         Settings {
-            EmptyView().frame(width: 0, height: 0)
+            PreferencesView()
         }
         
         // Command menu for showing the window

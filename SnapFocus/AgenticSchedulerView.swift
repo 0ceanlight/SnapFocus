@@ -9,11 +9,11 @@ import SwiftUI
 
 struct AgenticSchedulerView: View {
     @EnvironmentObject var calendarManager: CalendarManager
+    @AppStorage("gemini_api_key") private var geminiAPIKey: String = ""
     
     // State for the Gemini Scheduler
     @State private var tasksDescription: String = ""
     @State private var learningStyle: String = "Pomodoro (25min work, 5min break)"
-    @State private var apiKey: String = ""
     @State private var geminiStatus: String = "Idle"
     
     // State for Bulk Time Shift
@@ -41,8 +41,10 @@ struct AgenticSchedulerView: View {
                     TextField("Working Style", text: $learningStyle)
                         .textFieldStyle(.roundedBorder)
 
-                    SecureField("Gemini API Key", text: $apiKey)
-                        .textFieldStyle(.roundedBorder)
+                    // Removed SecureField for API Key, now managed in Preferences
+                    Text("Gemini API Key is managed in Preferences (Cmd+,)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
 
                     Button(action: generateSchedule) {
                         HStack {
@@ -50,7 +52,7 @@ struct AgenticSchedulerView: View {
                             Text("Generate Schedule")
                         }
                     }
-                    .disabled(apiKey.isEmpty || tasksDescription.isEmpty)
+                    .disabled(geminiAPIKey.isEmpty || tasksDescription.isEmpty)
                 }
                 .padding(.vertical, 8)
             }
@@ -99,12 +101,12 @@ struct AgenticSchedulerView: View {
     }
 
     private func generateSchedule() {
-        guard !apiKey.isEmpty else {
-            geminiStatus = "Error: Gemini API Key is missing."
+        guard !geminiAPIKey.isEmpty else {
+            geminiStatus = "Error: Gemini API Key is missing. Set it in Preferences (Cmd+,)."
             return
         }
 
-        scheduler = GeminiCalendarScheduler(apiKey: apiKey)
+        scheduler = GeminiCalendarScheduler(apiKey: geminiAPIKey)
         geminiStatus = "Generating schedule..."
 
         Task {
@@ -128,7 +130,7 @@ struct AgenticSchedulerView: View {
         }
         
         shiftStatus = "Shifting events..."
-        Task {
+        Task { @MainActor in // <-- Added @MainActor here
             do {
                 try await calendarManager.shiftTodaysEvents(by: timeInterval)
                 shiftStatus = "✅ Successfully shifted events!"

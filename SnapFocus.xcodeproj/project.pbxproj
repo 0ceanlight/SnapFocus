@@ -22,6 +22,7 @@
 		1DD1C2E12ED26CEE0087A71B /* GeminiCalendarScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD1C2DE2ED26CEE0087A71B /* GeminiCalendarScheduler.swift */; };
 		1DD1C2E22ED26CEE0087A71B /* RectangleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD1C2DF2ED26CEE0087A71B /* RectangleManager.swift */; };
 		1DD1C2E52ED26D3E0087A71B /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 1DD1C2E42ED26D3E0087A71B /* GoogleGenerativeAI */; };
+		1DD1C2E72ED278730087A71B /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD1C2E62ED278730087A71B /* PreferencesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		1DD1C2DD2ED26CEE0087A71B /* AgenticSchedulerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgenticSchedulerView.swift; sourceTree = "<group>"; };
 		1DD1C2DE2ED26CEE0087A71B /* GeminiCalendarScheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeminiCalendarScheduler.swift; sourceTree = "<group>"; };
 		1DD1C2DF2ED26CEE0087A71B /* RectangleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectangleManager.swift; sourceTree = "<group>"; };
+		1DD1C2E62ED278730087A71B /* PreferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 				1DD1C2DF2ED26CEE0087A71B /* RectangleManager.swift */,
 				1D811CB32ED1D4B0004950EF /* CalendarManager.swift */,
 				1D811CAF2ED1BA3B004950EF /* FloatingWindow.swift */,
+				1DD1C2E62ED278730087A71B /* PreferencesView.swift */,
 				1D356C9F2ED1FFD60093C8A0 /* Models.swift */,
 				1D811CB12ED1BA68004950EF /* RulerView.swift */,
 				1D811C862ED1B69D004950EF /* ContentView.swift */,
@@ -296,6 +299,7 @@
 				1DD1C2E12ED26CEE0087A71B /* GeminiCalendarScheduler.swift in Sources */,
 				1DD1C2E22ED26CEE0087A71B /* RectangleManager.swift in Sources */,
 				1D811C852ED1B69D004950EF /* SnapFocusApp.swift in Sources */,
+				1DD1C2E72ED278730087A71B /* PreferencesView.swift in Sources */,
 				1D356CA02ED1FFD60093C8A0 /* Models.swift in Sources */,
 				1D811CB22ED1BA68004950EF /* RulerView.swift in Sources */,
 				1D811CB42ED1D4B0004950EF /* CalendarManager.swift in Sources */,
