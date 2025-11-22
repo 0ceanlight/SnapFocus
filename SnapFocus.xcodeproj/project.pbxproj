@@ -1,0 +1,578 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1D811C852ED1B69D004950EF /* SnapFocusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811C842ED1B69D004950EF /* SnapFocusApp.swift */; };
+		1D811C872ED1B69D004950EF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811C862ED1B69D004950EF /* ContentView.swift */; };
+		1D811C892ED1B69E004950EF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D811C882ED1B69E004950EF /* Assets.xcassets */; };
+		1D811C8C2ED1B69E004950EF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D811C8B2ED1B69E004950EF /* Preview Assets.xcassets */; };
+		1D811C972ED1B69F004950EF /* SnapFocusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811C962ED1B69F004950EF /* SnapFocusTests.swift */; };
+		1D811CA12ED1B69F004950EF /* SnapFocusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811CA02ED1B69F004950EF /* SnapFocusUITests.swift */; };
+		1D811CA32ED1B69F004950EF /* SnapFocusUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811CA22ED1B69F004950EF /* SnapFocusUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1D811C932ED1B69F004950EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1D811C792ED1B69D004950EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1D811C802ED1B69D004950EF;
+			remoteInfo = SnapFocus;
+		};
+		1D811C9D2ED1B69F004950EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1D811C792ED1B69D004950EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1D811C802ED1B69D004950EF;
+			remoteInfo = SnapFocus;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1D811C812ED1B69D004950EF /* SnapFocus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnapFocus.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D811C842ED1B69D004950EF /* SnapFocusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapFocusApp.swift; sourceTree = "<group>"; };
+		1D811C862ED1B69D004950EF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		1D811C882ED1B69E004950EF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1D811C8B2ED1B69E004950EF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		1D811C8D2ED1B69E004950EF /* SnapFocus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SnapFocus.entitlements; sourceTree = "<group>"; };
+		1D811C922ED1B69F004950EF /* SnapFocusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SnapFocusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D811C962ED1B69F004950EF /* SnapFocusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapFocusTests.swift; sourceTree = "<group>"; };
+		1D811C9C2ED1B69F004950EF /* SnapFocusUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SnapFocusUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D811CA02ED1B69F004950EF /* SnapFocusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapFocusUITests.swift; sourceTree = "<group>"; };
+		1D811CA22ED1B69F004950EF /* SnapFocusUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapFocusUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D811C7E2ED1B69D004950EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1D811C8F2ED1B69F004950EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1D811C992ED1B69F004950EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1D811C782ED1B69D004950EF = {
+			isa = PBXGroup;
+			children = (
+				1D811C832ED1B69D004950EF /* SnapFocus */,
+				1D811C952ED1B69F004950EF /* SnapFocusTests */,
+				1D811C9F2ED1B69F004950EF /* SnapFocusUITests */,
+				1D811C822ED1B69D004950EF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1D811C822ED1B69D004950EF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D811C812ED1B69D004950EF /* SnapFocus.app */,
+				1D811C922ED1B69F004950EF /* SnapFocusTests.xctest */,
+				1D811C9C2ED1B69F004950EF /* SnapFocusUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1D811C832ED1B69D004950EF /* SnapFocus */ = {
+			isa = PBXGroup;
+			children = (
+				1D811C842ED1B69D004950EF /* SnapFocusApp.swift */,
+				1D811C862ED1B69D004950EF /* ContentView.swift */,
+				1D811C882ED1B69E004950EF /* Assets.xcassets */,
+				1D811C8D2ED1B69E004950EF /* SnapFocus.entitlements */,
+				1D811C8A2ED1B69E004950EF /* Preview Content */,
+			);
+			path = SnapFocus;
+			sourceTree = "<group>";
+		};
+		1D811C8A2ED1B69E004950EF /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				1D811C8B2ED1B69E004950EF /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		1D811C952ED1B69F004950EF /* SnapFocusTests */ = {
+			isa = PBXGroup;
+			children = (
+				1D811C962ED1B69F004950EF /* SnapFocusTests.swift */,
+			);
+			path = SnapFocusTests;
+			sourceTree = "<group>";
+		};
+		1D811C9F2ED1B69F004950EF /* SnapFocusUITests */ = {
+			isa = PBXGroup;
+			children = (
+				1D811CA02ED1B69F004950EF /* SnapFocusUITests.swift */,
+				1D811CA22ED1B69F004950EF /* SnapFocusUITestsLaunchTests.swift */,
+			);
+			path = SnapFocusUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D811C802ED1B69D004950EF /* SnapFocus */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D811CA62ED1B69F004950EF /* Build configuration list for PBXNativeTarget "SnapFocus" */;
+			buildPhases = (
+				1D811C7D2ED1B69D004950EF /* Sources */,
+				1D811C7E2ED1B69D004950EF /* Frameworks */,
+				1D811C7F2ED1B69D004950EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SnapFocus;
+			productName = SnapFocus;
+			productReference = 1D811C812ED1B69D004950EF /* SnapFocus.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1D811C912ED1B69F004950EF /* SnapFocusTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D811CA92ED1B69F004950EF /* Build configuration list for PBXNativeTarget "SnapFocusTests" */;
+			buildPhases = (
+				1D811C8E2ED1B69F004950EF /* Sources */,
+				1D811C8F2ED1B69F004950EF /* Frameworks */,
+				1D811C902ED1B69F004950EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1D811C942ED1B69F004950EF /* PBXTargetDependency */,
+			);
+			name = SnapFocusTests;
+			productName = SnapFocusTests;
+			productReference = 1D811C922ED1B69F004950EF /* SnapFocusTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		1D811C9B2ED1B69F004950EF /* SnapFocusUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D811CAC2ED1B69F004950EF /* Build configuration list for PBXNativeTarget "SnapFocusUITests" */;
+			buildPhases = (
+				1D811C982ED1B69F004950EF /* Sources */,
+				1D811C992ED1B69F004950EF /* Frameworks */,
+				1D811C9A2ED1B69F004950EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1D811C9E2ED1B69F004950EF /* PBXTargetDependency */,
+			);
+			name = SnapFocusUITests;
+			productName = SnapFocusUITests;
+			productReference = 1D811C9C2ED1B69F004950EF /* SnapFocusUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1D811C792ED1B69D004950EF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					1D811C802ED1B69D004950EF = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					1D811C912ED1B69F004950EF = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 1D811C802ED1B69D004950EF;
+					};
+					1D811C9B2ED1B69F004950EF = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 1D811C802ED1B69D004950EF;
+					};
+				};
+			};
+			buildConfigurationList = 1D811C7C2ED1B69D004950EF /* Build configuration list for PBXProject "SnapFocus" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1D811C782ED1B69D004950EF;
+			productRefGroup = 1D811C822ED1B69D004950EF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D811C802ED1B69D004950EF /* SnapFocus */,
+				1D811C912ED1B69F004950EF /* SnapFocusTests */,
+				1D811C9B2ED1B69F004950EF /* SnapFocusUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1D811C7F2ED1B69D004950EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D811C8C2ED1B69E004950EF /* Preview Assets.xcassets in Resources */,
+				1D811C892ED1B69E004950EF /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1D811C902ED1B69F004950EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1D811C9A2ED1B69F004950EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D811C7D2ED1B69D004950EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D811C872ED1B69D004950EF /* ContentView.swift in Sources */,
+				1D811C852ED1B69D004950EF /* SnapFocusApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1D811C8E2ED1B69F004950EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D811C972ED1B69F004950EF /* SnapFocusTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1D811C982ED1B69F004950EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D811CA12ED1B69F004950EF /* SnapFocusUITests.swift in Sources */,
+				1D811CA32ED1B69F004950EF /* SnapFocusUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1D811C942ED1B69F004950EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1D811C802ED1B69D004950EF /* SnapFocus */;
+			targetProxy = 1D811C932ED1B69F004950EF /* PBXContainerItemProxy */;
+		};
+		1D811C9E2ED1B69F004950EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1D811C802ED1B69D004950EF /* SnapFocus */;
+			targetProxy = 1D811C9D2ED1B69F004950EF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1D811CA42ED1B69F004950EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1D811CA52ED1B69F004950EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		1D811CA72ED1B69F004950EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SnapFocus/SnapFocus.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SnapFocus/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oceanlight.SnapFocus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		1D811CA82ED1B69F004950EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SnapFocus/SnapFocus.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SnapFocus/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oceanlight.SnapFocus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		1D811CAA2ED1B69F004950EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oceanlight.SnapFocusTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnapFocus.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SnapFocus";
+			};
+			name = Debug;
+		};
+		1D811CAB2ED1B69F004950EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oceanlight.SnapFocusTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnapFocus.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SnapFocus";
+			};
+			name = Release;
+		};
+		1D811CAD2ED1B69F004950EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oceanlight.SnapFocusUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = SnapFocus;
+			};
+			name = Debug;
+		};
+		1D811CAE2ED1B69F004950EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oceanlight.SnapFocusUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = SnapFocus;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D811C7C2ED1B69D004950EF /* Build configuration list for PBXProject "SnapFocus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D811CA42ED1B69F004950EF /* Debug */,
+				1D811CA52ED1B69F004950EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1D811CA62ED1B69F004950EF /* Build configuration list for PBXNativeTarget "SnapFocus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D811CA72ED1B69F004950EF /* Debug */,
+				1D811CA82ED1B69F004950EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1D811CA92ED1B69F004950EF /* Build configuration list for PBXNativeTarget "SnapFocusTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D811CAA2ED1B69F004950EF /* Debug */,
+				1D811CAB2ED1B69F004950EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1D811CAC2ED1B69F004950EF /* Build configuration list for PBXNativeTarget "SnapFocusUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D811CAD2ED1B69F004950EF /* Debug */,
+				1D811CAE2ED1B69F004950EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1D811C792ED1B69D004950EF /* Project object */;
+}
