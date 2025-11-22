@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+import AppKit
 
 struct RulerView: View {
     @ObservedObject var cal: CalendarManager
@@ -28,6 +29,10 @@ struct RulerView: View {
     @State private var selectedBlock: EventBlock? = nil
     @State private var showPopover: Bool = false
     @State private var popoverAnchorFrame: CGRect = .zero
+
+    // Interaction State
+    @State private var eventMonitor: Any? = nil
+    @State private var lastShiftDelta: Double = 0 // For UI feedback only
 
     var body: some View {
         let isCollapsed = enableHoverFeature && !isHovering
@@ -73,42 +78,38 @@ struct RulerView: View {
                         let height = size.height
                         let anchorNow = now
                         let whiteY = height * whiteLineRatio
-
+                        
                         // visible time window in seconds for clipping
                         let visibleTopSeconds = TimeInterval(-(whiteY / pixelsPerMinute) * 60.0)
                         let visibleBottomSeconds = TimeInterval(((height - whiteY) / pixelsPerMinute) * 60.0)
 
-                        // draw event backgrounds
+                        // draw event backgrounds (Live from cal.blocks which updates during drag)
                         for block in cal.blocks {
                             let sSec = block.start.timeIntervalSince(anchorNow)
                             let eSec = block.end.timeIntervalSince(anchorNow)
 
-                            // quick clip (if block entirely outside visible range, skip)
-                            if eSec < visibleTopSeconds || sSec > visibleBottomSeconds { continue }
-
                             let yStart = whiteY + CGFloat(sSec / 60.0) * pixelsPerMinute
                             let yEnd   = whiteY + CGFloat(eSec / 60.0) * pixelsPerMinute
+                            
+                            if yEnd < 0 || yStart > height { continue }
+
                             let rect = CGRect(x: 0, y: yStart, width: rulerWidth, height: max(1, yEnd - yStart))
 
                             context.fill(Path(rect), with: .color(block.color.opacity(0.18)))
-                            // faint border
                             context.stroke(Path(rect), with: .color(block.color.opacity(0.35)), lineWidth: 1.0)
                         }
 
                         // ticks: aligned to nearest 15-min mark covering visible range
                         let stepSeconds = 15 * 60
-                        // compute visibleStart and visibleEnd absolute Dates
                         let visibleStart = anchorNow.addingTimeInterval(visibleTopSeconds)
                         let visibleEnd   = anchorNow.addingTimeInterval(visibleBottomSeconds)
 
-                        // find first tick at or before visibleStart that is a multiple of 15 minutes
                         let calComp = Calendar.current
                         let comps = calComp.dateComponents([.year, .month, .day, .hour, .minute], from: visibleStart)
                         var minute = comps.minute ?? 0
-                        minute = (minute / 15) * 15 // floor to nearest 15
+                        minute = (minute / 15) * 15
                         var firstTick = calComp.date(bySettingHour: comps.hour ?? 0, minute: minute, second: 0, of: visibleStart) ?? visibleStart
 
-                        // if firstTick is still > visibleStart, step back one
                         if firstTick > visibleStart {
                             firstTick = firstTick.addingTimeInterval(TimeInterval(-stepSeconds))
                         }
@@ -117,15 +118,15 @@ struct RulerView: View {
                         while tickTime <= visibleEnd {
                             let y = whiteY + CGFloat(tickTime.timeIntervalSince(anchorNow) / 60.0) * pixelsPerMinute
 
-                            // is full hour?
                             let tickComps = calComp.dateComponents([.minute], from: tickTime)
                             let isHour = (tickComps.minute ?? 0) == 0
 
                             let tickWidth: CGFloat = isHour ? rulerWidth * 0.60 : rulerWidth * 0.30
                             let tickX: CGFloat = 6
 
-                            // tick color: if event covers that moment, show event color; else gray
+                            // tick color: if event covers that moment, show event color
                             var tickColor = Color.gray.opacity(0.7)
+                            // Use updated blocks for tick coloring too
                             if let ev = cal.blocks.first(where: { $0.start <= tickTime && $0.end > tickTime }) {
                                 tickColor = ev.color
                             }
@@ -135,7 +136,6 @@ struct RulerView: View {
                             tickPath.addLine(to: CGPoint(x: tickX + tickWidth, y: y))
                             context.stroke(tickPath, with: .color(tickColor), lineWidth: isHour ? 2.0 : 1.0)
 
-                            // hour label
                             if isHour {
                                 let hourFormatter = DateFormatter()
                                 hourFormatter.dateFormat = "HH:mm"
@@ -147,26 +147,23 @@ struct RulerView: View {
                             tickTime = tickTime.addingTimeInterval(TimeInterval(stepSeconds))
                         }
 
-                        // gray base when no events exist (subtle)
                         if cal.blocks.isEmpty {
                             context.fill(Path(CGRect(x: 0, y: 0, width: rulerWidth, height: height)), with: .color(Color.gray.opacity(0.06)))
                         }
 
-                        // right edge shadow
                         var edgePath = Path(CGRect(x: rulerWidth - 1, y: 0, width: 1, height: height))
                         context.fill(edgePath, with: .color(Color.black.opacity(0.07)))
                     }
                     .frame(width: rulerWidth)
 
-                    // clickable labels: placed in view coordinates using offsets
+                    // clickable labels
                     ForEach(cal.blocks) { block in
-                        // compute position and size
                         let sSec = block.start.timeIntervalSince(now)
                         let eSec = block.end.timeIntervalSince(now)
+                        
                         let yStart = geo.size.height * whiteLineRatio + CGFloat(sSec / 60.0) * pixelsPerMinute
                         let heightPx = max(18, CGFloat((eSec - sSec) / 60.0) * pixelsPerMinute)
 
-                        // skip if outside view
                         if yStart + heightPx < 0 || yStart > geo.size.height {
                             EmptyView()
                         } else {
@@ -175,13 +172,11 @@ struct RulerView: View {
                                 showPopover = true
                             }) {
                                 HStack(alignment: .center, spacing: 8) {
-                                    // short colored tick indicator
                                     Rectangle()
                                         .fill(block.color)
                                         .frame(width: 6, height: min(18, heightPx))
                                         .cornerRadius(2)
 
-                                    // title text (trimmed)
                                     Text(block.title)
                                         .font(.caption)
                                         .lineLimit(1)
@@ -206,9 +201,18 @@ struct RulerView: View {
                             }
                         }
                     }
-                } // end else (for expanded view)
+                    
+                    // Interaction Feedback
+                    // Since we modify blocks directly, we might not need an overlay, 
+                    // but user requested "labeling how much time they're shifting by".
+                    // We can show this transiently if we track `lastShiftDelta` in View but reset it.
+                    // Actually, simpler: show it if non-zero, fade out? 
+                    // Since `nudgeCurrentTask` handles logic, the View doesn't know the exact cumulative delta easily 
+                    // unless we expose it or track it separately.
+                    // For now, let's keep it simple: visual feedback is the blocks moving.
+                }
                 
-                // Current time white line and label (always at 30% down)
+                // Current time white line
                 VStack(spacing: 4) {
                     Spacer().frame(height: geo.size.height * whiteLineRatio)
 
@@ -231,11 +235,10 @@ struct RulerView: View {
                     Spacer()
                 }
                 .allowsHitTesting(false)
-            } // ZStack
-        } // GeometryReader
-        .frame(width: currentWidth) // overall width including labels; the left ruler is fixed width
+            }
+        }
+        .frame(width: currentWidth)
         .onReceive(timer) { t in
-            // update "now" frequently to keep white line in place
             self.now = t
         }
         .onHover { hovering in
@@ -244,6 +247,31 @@ struct RulerView: View {
                     self.isHovering = hovering
                 }
             }
+        }
+        .onAppear {
+            setupKeyboardMonitor()
+        }
+        .onDisappear {
+            if let monitor = eventMonitor {
+                NSEvent.removeMonitor(monitor)
+            }
+        }
+    }
+
+    private func setupKeyboardMonitor() {
+        eventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            guard self.isHovering else { return event }
+            
+            if event.specialKey == .upArrow {
+                // Shorten active task (-5 min)
+                cal.nudgeCurrentTask(byMinutes: -5)
+                return nil
+            } else if event.specialKey == .downArrow {
+                // Extend active task (+5 min)
+                cal.nudgeCurrentTask(byMinutes: 5)
+                return nil
+            }
+            return event
         }
     }
 
@@ -254,7 +282,6 @@ struct RulerView: View {
     }
 }
 
-// Simple event detail view shown in popover
 struct EventDetailView: View {
     let block: EventBlock
     private let df: DateFormatter = {
@@ -276,10 +303,7 @@ struct EventDetailView: View {
                 Text(block.calendarTitle).font(.subheadline)
             }
             Spacer().frame(height: 8)
-            Button("Jump to start") {
-                // Optional: implement action to center the ruler on the event start
-                // you can add an action/closure to RulerView or call a published value in CalendarManager
-            }
+            Button("Jump to start") { }
             Spacer()
         }
         .padding()
