@@ -14,6 +14,9 @@
 		1D811C972ED1B69F004950EF /* SnapFocusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811C962ED1B69F004950EF /* SnapFocusTests.swift */; };
 		1D811CA12ED1B69F004950EF /* SnapFocusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811CA02ED1B69F004950EF /* SnapFocusUITests.swift */; };
 		1D811CA32ED1B69F004950EF /* SnapFocusUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811CA22ED1B69F004950EF /* SnapFocusUITestsLaunchTests.swift */; };
+		1D811CB02ED1BA3B004950EF /* FloatingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811CAF2ED1BA3B004950EF /* FloatingWindow.swift */; };
+		1D811CB22ED1BA68004950EF /* RulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811CB12ED1BA68004950EF /* RulerView.swift */; };
+		1D811CB42ED1D4B0004950EF /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811CB32ED1D4B0004950EF /* CalendarManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +48,10 @@
 		1D811C9C2ED1B69F004950EF /* SnapFocusUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SnapFocusUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D811CA02ED1B69F004950EF /* SnapFocusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapFocusUITests.swift; sourceTree = "<group>"; };
 		1D811CA22ED1B69F004950EF /* SnapFocusUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapFocusUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		1D811CAF2ED1BA3B004950EF /* FloatingWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingWindow.swift; sourceTree = "<group>"; };
+		1D811CB12ED1BA68004950EF /* RulerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulerView.swift; sourceTree = "<group>"; };
+		1D811CB32ED1D4B0004950EF /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
+		1D811CB52ED1DC26004950EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,7 +102,11 @@
 		1D811C832ED1B69D004950EF /* SnapFocus */ = {
 			isa = PBXGroup;
 			children = (
+				1D811CB52ED1DC26004950EF /* Info.plist */,
 				1D811C842ED1B69D004950EF /* SnapFocusApp.swift */,
+				1D811CB32ED1D4B0004950EF /* CalendarManager.swift */,
+				1D811CAF2ED1BA3B004950EF /* FloatingWindow.swift */,
+				1D811CB12ED1BA68004950EF /* RulerView.swift */,
 				1D811C862ED1B69D004950EF /* ContentView.swift */,
 				1D811C882ED1B69E004950EF /* Assets.xcassets */,
 				1D811C8D2ED1B69E004950EF /* SnapFocus.entitlements */,
@@ -194,6 +205,7 @@
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1540;
+				ORGANIZATIONNAME = 0ceanlight;
 				TargetAttributes = {
 					1D811C802ED1B69D004950EF = {
 						CreatedOnToolsVersion = 15.4;
@@ -259,8 +271,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D811CB02ED1BA3B004950EF /* FloatingWindow.swift in Sources */,
 				1D811C872ED1B69D004950EF /* ContentView.swift in Sources */,
 				1D811C852ED1B69D004950EF /* SnapFocusApp.swift in Sources */,
+				1D811CB22ED1BA68004950EF /* RulerView.swift in Sources */,
+				1D811CB42ED1D4B0004950EF /* CalendarManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,8 +440,11 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SnapFocus/Preview Content\"";
+				DEVELOPMENT_TEAM = NNR5X4R6Q9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SnapFocus/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -450,8 +468,11 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SnapFocus/Preview Content\"";
+				DEVELOPMENT_TEAM = NNR5X4R6Q9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SnapFocus/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

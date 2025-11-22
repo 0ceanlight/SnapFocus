@@ -2,7 +2,7 @@
 //  SnapFocusTests.swift
 //  SnapFocusTests
 //
-//  Created by Francesca Frederick on 11/22/25.
+//  Created by 0ceanlight on 11/22/25.
 //
 
 import XCTest
