@@ -18,6 +18,10 @@
 		1D811CB02ED1BA3B004950EF /* FloatingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811CAF2ED1BA3B004950EF /* FloatingWindow.swift */; };
 		1D811CB22ED1BA68004950EF /* RulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811CB12ED1BA68004950EF /* RulerView.swift */; };
 		1D811CB42ED1D4B0004950EF /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811CB32ED1D4B0004950EF /* CalendarManager.swift */; };
+		1DD1C2E02ED26CEE0087A71B /* AgenticSchedulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD1C2DD2ED26CEE0087A71B /* AgenticSchedulerView.swift */; };
+		1DD1C2E12ED26CEE0087A71B /* GeminiCalendarScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD1C2DE2ED26CEE0087A71B /* GeminiCalendarScheduler.swift */; };
+		1DD1C2E22ED26CEE0087A71B /* RectangleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD1C2DF2ED26CEE0087A71B /* RectangleManager.swift */; };
+		1DD1C2E52ED26D3E0087A71B /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 1DD1C2E42ED26D3E0087A71B /* GoogleGenerativeAI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +58,9 @@
 		1D811CB12ED1BA68004950EF /* RulerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulerView.swift; sourceTree = "<group>"; };
 		1D811CB32ED1D4B0004950EF /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
 		1D811CB52ED1DC26004950EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		1DD1C2DD2ED26CEE0087A71B /* AgenticSchedulerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgenticSchedulerView.swift; sourceTree = "<group>"; };
+		1DD1C2DE2ED26CEE0087A71B /* GeminiCalendarScheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeminiCalendarScheduler.swift; sourceTree = "<group>"; };
+		1DD1C2DF2ED26CEE0087A71B /* RectangleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectangleManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DD1C2E52ED26D3E0087A71B /* GoogleGenerativeAI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,6 +114,9 @@
 			children = (
 				1D811CB52ED1DC26004950EF /* Info.plist */,
 				1D811C842ED1B69D004950EF /* SnapFocusApp.swift */,
+				1DD1C2DD2ED26CEE0087A71B /* AgenticSchedulerView.swift */,
+				1DD1C2DE2ED26CEE0087A71B /* GeminiCalendarScheduler.swift */,
+				1DD1C2DF2ED26CEE0087A71B /* RectangleManager.swift */,
 				1D811CB32ED1D4B0004950EF /* CalendarManager.swift */,
 				1D811CAF2ED1BA3B004950EF /* FloatingWindow.swift */,
 				1D356C9F2ED1FFD60093C8A0 /* Models.swift */,
@@ -159,6 +170,9 @@
 			dependencies = (
 			);
 			name = SnapFocus;
+			packageProductDependencies = (
+				1DD1C2E42ED26D3E0087A71B /* GoogleGenerativeAI */,
+			);
 			productName = SnapFocus;
 			productReference = 1D811C812ED1B69D004950EF /* SnapFocus.app */;
 			productType = "com.apple.product-type.application";
@@ -232,6 +246,9 @@
 				Base,
 			);
 			mainGroup = 1D811C782ED1B69D004950EF;
+			packageReferences = (
+				1DD1C2E32ED26D3E0087A71B /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
+			);
 			productRefGroup = 1D811C822ED1B69D004950EF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -276,10 +293,13 @@
 			files = (
 				1D811CB02ED1BA3B004950EF /* FloatingWindow.swift in Sources */,
 				1D811C872ED1B69D004950EF /* ContentView.swift in Sources */,
+				1DD1C2E12ED26CEE0087A71B /* GeminiCalendarScheduler.swift in Sources */,
+				1DD1C2E22ED26CEE0087A71B /* RectangleManager.swift in Sources */,
 				1D811C852ED1B69D004950EF /* SnapFocusApp.swift in Sources */,
 				1D356CA02ED1FFD60093C8A0 /* Models.swift in Sources */,
 				1D811CB22ED1BA68004950EF /* RulerView.swift in Sources */,
 				1D811CB42ED1D4B0004950EF /* CalendarManager.swift in Sources */,
+				1DD1C2E02ED26CEE0087A71B /* AgenticSchedulerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,7 +464,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SnapFocus/Preview Content\"";
-				DEVELOPMENT_TEAM = 3M9KRA7XZQ;
+				DEVELOPMENT_TEAM = NNR5X4R6Q9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SnapFocus/Info.plist;
@@ -472,7 +492,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SnapFocus/Preview Content\"";
-				DEVELOPMENT_TEAM = 3M9KRA7XZQ;
+				DEVELOPMENT_TEAM = NNR5X4R6Q9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SnapFocus/Info.plist;
@@ -598,6 +618,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1DD1C2E32ED26D3E0087A71B /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/generative-ai-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1DD1C2E42ED26D3E0087A71B /* GoogleGenerativeAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1DD1C2E32ED26D3E0087A71B /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
+			productName = GoogleGenerativeAI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1D811C792ED1B69D004950EF /* Project object */;
 }

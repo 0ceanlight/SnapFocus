@@ -33,7 +33,7 @@ final class CalendarManager: ObservableObject {
 
     init(calendarName: String = "SnapFocus") {
         self.calendarName = calendarName
-        start()
+        // DO NOT start() here anymore. AppDelegate will call it.
     }
 
     deinit {
@@ -43,19 +43,17 @@ final class CalendarManager: ObservableObject {
         }
     }
 
-    func start() {
-        requestAccess { granted in
-            guard granted else {
-                print("SnapFocus: Calendar access denied.")
-                DispatchQueue.main.async {
-                    self.blocks = []
-                }
-                return
-            }
-            self.fetchAndPublishToday()
-            self.setupEventStoreListener()
-            self.setupPeriodicPoll()
+    @MainActor
+    func start() async {
+        let granted = await requestAccess()
+        guard granted else {
+            print("SnapFocus: Calendar access denied.")
+            self.blocks = []
+            return
         }
+        await fetchAndPublishToday()
+        setupEventStoreListener()
+        setupPeriodicPoll()
     }
 
     private func stopTimers() {
@@ -64,24 +62,22 @@ final class CalendarManager: ObservableObject {
     }
 
     // MARK: - Permissions (Sonoma-friendly)
-    func requestAccess(completion: @escaping (Bool) -> Void) {
+    func requestAccess() async -> Bool {
         if #available(macOS 14.0, *) {
-            store.requestFullAccessToEvents { granted, error in
-                if let error = error {
-                    print("Calendar access error:", error.localizedDescription)
-                }
-                DispatchQueue.main.async {
-                    completion(granted)
-                }
+            do {
+                let granted = try await store.requestFullAccessToEvents()
+                return granted
+            } catch {
+                print("Calendar access error:", error.localizedDescription)
+                return false
             }
         } else {
-            store.requestAccess(to: .event) { granted, error in
-                if let error = error {
-                    print("Calendar access error (legacy):", error.localizedDescription)
-                }
-                DispatchQueue.main.async {
-                    completion(granted)
-                }
+            do {
+                let granted = try await store.requestAccess(to: .event)
+                return granted
+            } catch {
+                print("Calendar access error (legacy):", error.localizedDescription)
+                return false
             }
         }
     }
@@ -93,7 +89,9 @@ final class CalendarManager: ObservableObject {
             object: store,
             queue: OperationQueue.main
         ) { [weak self] _ in
-            self?.fetchAndPublishToday()
+            Task {
+                await self?.fetchAndPublishToday()
+            }
         }
     }
 
@@ -101,17 +99,18 @@ final class CalendarManager: ObservableObject {
     private func setupPeriodicPoll() {
         stopTimers()
         timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
-            self?.fetchAndPublishToday()
+            Task {
+                await self?.fetchAndPublishToday()
+            }
         }
         RunLoop.main.add(timer!, forMode: .common)
     }
 
     // MARK: - Fetch only today's events
-    // TODO: fetch others also?
-    func fetchAndPublishToday(completion: (() -> Void)? = nil) {
+    @MainActor
+    func fetchAndPublishToday() async {
         // Prevent overwriting local changes if user is currently interacting
         if shiftSession != nil {
-            completion?()
             return
         }
 
@@ -119,17 +118,13 @@ final class CalendarManager: ObservableObject {
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: now)
         guard let endOfDay = calendar.date(byAdding: DateComponents(day: 1, second: -1), to: startOfDay) else {
-            completion?()
             return
         }
 
         // find calendars with matching title
         let calendars = store.calendars(for: .event).filter { $0.title == calendarName }
         guard !calendars.isEmpty else {
-            DispatchQueue.main.async {
-                self.blocks = []
-                completion?()
-            }
+            self.blocks = []
             return
         }
 
@@ -137,11 +132,7 @@ final class CalendarManager: ObservableObject {
         let events = store.events(matching: predicate)
 
         let newBlocks = EventBlock.assignColorsOrdered(events: events)
-
-        DispatchQueue.main.async {
-            self.blocks = newBlocks
-            completion?()
-        }
+        self.blocks = newBlocks
     }
 
     // MARK: - Time Shift Logic
@@ -280,13 +271,59 @@ final class CalendarManager: ObservableObject {
                 try self.store.commit()
                 print("Successfully nudged active task and \(connectedIds.count) future tasks by \(session.currentDeltaMinutes) min.")
                 
-                self.fetchAndPublishToday()
+                Task {
+                    await self.fetchAndPublishToday()
+                }
             } catch {
                 print("Error saving nudged events: \(error.localizedDescription)")
-                self.fetchAndPublishToday()
+                Task {
+                    await self.fetchAndPublishToday()
+                }
             }
         }
     }
 
     /// Shifts all current events by the specified number of minutes.
+    @MainActor
+    func shiftTodaysEvents(by timeInterval: TimeInterval) async throws {
+        // Prevent accidental overwrites if a shift session is active
+        if shiftSession != nil {
+            throw NSError(domain: "CalendarManagerError", code: 3, userInfo: [NSLocalizedDescriptionKey: "Cannot bulk shift while an active task is being nudged."])
+        }
+        
+        let now = Date()
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: now)
+        guard let endOfDay = calendar.date(byAdding: DateComponents(day: 1, second: -1), to: startOfDay) else {
+            throw NSError(domain: "CalendarManagerError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Could not determine end of day."])
+        }
+
+        let calendars = store.calendars(for: .event).filter { $0.title == calendarName }
+        guard let snapFocusCalendar = calendars.first else {
+            throw NSError(domain: "CalendarManagerError", code: 5, userInfo: [NSLocalizedDescriptionKey: "SnapFocus calendar not found. Please create it first."])
+        }
+
+        let predicate = store.predicateForEvents(withStart: startOfDay, end: endOfDay, calendars: [snapFocusCalendar])
+        let events = store.events(matching: predicate)
+        
+        var eventsToSave: [EKEvent] = []
+        for event in events {
+            guard event.isDetached == false else { continue } // Skip detached occurrences of recurring events
+            
+            event.startDate = event.startDate.addingTimeInterval(timeInterval)
+            event.endDate = event.endDate.addingTimeInterval(timeInterval)
+            eventsToSave.append(event)
+        }
+        
+        // Save all changes in a single commit for efficiency and atomicity
+        for event in eventsToSave {
+            try store.save(event, span: .thisEvent, commit: false)
+        }
+        try store.commit()
+        
+        print("Successfully shifted \(eventsToSave.count) events by \(timeInterval / 60.0) minutes.")
+        
+        // Refresh the UI
+        await fetchAndPublishToday()
+    }
 }
