@@ -20,6 +20,11 @@ struct VoiceOverlayView: View {
     @State private var opacity: Double = 0.8
     @State private var rotation: Double = 0.0
     
+    // Typing Mode State
+    @State private var isTypingMode: Bool = false
+    @State private var typedInput: String = ""
+    @FocusState private var isTextFieldFocused: Bool
+    
     enum ProcessingState: Equatable {
         case idle
         case listening
@@ -36,74 +41,135 @@ struct VoiceOverlayView: View {
             Color.black.opacity(0.01) // Nearly transparent to catch clicks if needed
                 .edgesIgnoringSafeArea(.all)
                 .onTapGesture {
-                    closeOverlay()
+                    if isTypingMode {
+                        isTypingMode = false
+                    } else {
+                        closeOverlay()
+                    }
                 }
             
             VStack(spacing: 20) {
-                // The Orb
-                ZStack {
-                    // Outer glow
-                    Circle()
-                        .fill(orbColor.opacity(0.3))
-                        .frame(width: 140, height: 140)
-                        .scaleEffect(processingState == .listening ? 1.2 : 1.0)
-                        .blur(radius: 20)
-                        .animation(processingState == .listening ? Animation.easeInOut(duration: 1).repeatForever(autoreverses: true) : .default, value: processingState)
-                    
-                    // Core
-                    Circle()
-                        .fill(
-                            LinearGradient(gradient: Gradient(colors: [orbColor, orbColor.opacity(0.6)]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                        )
-                        .frame(width: 100, height: 100)
-                        .shadow(color: orbColor.opacity(0.5), radius: 10, x: 0, y: 0)
-                        .scaleEffect(scale)
-                        .onAppear {
-                            withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
-                                scale = 1.1
+                if isTypingMode {
+                    // Typing Interface
+                    VStack(spacing: 16) {
+                        TextField("What's your plan?", text: $typedInput)
+                            .textFieldStyle(.plain)
+                            .font(.title2)
+                            .padding(16)
+                            .background(Color.black.opacity(0.6))
+                            .cornerRadius(12)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                            )
+                            .focused($isTextFieldFocused)
+                            .onSubmit {
+                                submitTypedInput()
                             }
+                            .frame(width: 350)
+                        
+                        Text("Press Enter to schedule")
+                            .font(.caption)
+                            .foregroundColor(.white.opacity(0.6))
+                    }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                } else {
+                    // Voice Interface (Orb)
+                    ZStack {
+                        // Outer glow
+                        Circle()
+                            .fill(orbColor.opacity(0.3))
+                            .frame(width: 140, height: 140)
+                            .scaleEffect(processingState == .listening ? 1.2 : 1.0)
+                            .blur(radius: 20)
+                            .animation(processingState == .listening ? Animation.easeInOut(duration: 1).repeatForever(autoreverses: true) : .default, value: processingState)
+                        
+                        // Core
+                        Circle()
+                            .fill(
+                                LinearGradient(gradient: Gradient(colors: [orbColor, orbColor.opacity(0.6)]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                            )
+                            .frame(width: 100, height: 100)
+                            .shadow(color: orbColor.opacity(0.5), radius: 10, x: 0, y: 0)
+                            .scaleEffect(scale)
+                            .onAppear {
+                                withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
+                                    scale = 1.1
+                                }
+                            }
+                        
+                        // Icon / State indicator
+                        Image(systemName: iconName)
+                            .font(.system(size: 40))
+                            .foregroundColor(.white.opacity(0.9))
+                            .rotationEffect(.degrees(rotation))
+                    }
+                    .onTapGesture {
+                        if processingState == .idle {
+                            startListening()
+                        } else if processingState == .listening {
+                            stopAndProcess()
                         }
+                    }
                     
-                    // Icon / State indicator
-                    Image(systemName: iconName)
-                        .font(.system(size: 40))
-                        .foregroundColor(.white.opacity(0.9))
-                        .rotationEffect(.degrees(rotation))
-                }
-                .onTapGesture {
-                    if processingState == .idle {
-                        startListening()
-                    } else if processingState == .listening {
-                        stopAndProcess()
+                    // Status Text
+                    Text(statusText)
+                        .font(.title2)
+                        .fontWeight(.medium)
+                        .foregroundColor(.white)
+                        .shadow(radius: 4)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 16)
+                        .background(Color.black.opacity(0.5))
+                        .cornerRadius(8)
+                    
+                    // Transcript Preview
+                    if !speechRecognizer.transcript.isEmpty && processingState == .listening {
+                        Text(speechRecognizer.transcript)
+                            .font(.body)
+                            .foregroundColor(.white.opacity(0.9))
+                            .multilineTextAlignment(.center)
+                            .padding()
+                            .frame(maxWidth: 400)
+                            .background(Color.black.opacity(0.3))
+                            .cornerRadius(12)
                     }
                 }
                 
-                // Status Text
-                Text(statusText)
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .foregroundColor(.white)
-                    .shadow(radius: 4)
-                    .padding(.horizontal)
-                    .background(Color.black.opacity(0.5))
-                    .cornerRadius(8)
-                
-                // Transcript Preview
-                if !speechRecognizer.transcript.isEmpty && processingState == .listening {
-                    Text(speechRecognizer.transcript)
-                        .font(.body)
-                        .foregroundColor(.white.opacity(0.9))
-                        .multilineTextAlignment(.center)
-                        .padding()
-                        .frame(maxWidth: 400)
-                        .background(Color.black.opacity(0.3))
-                        .cornerRadius(12)
+                // Keyboard Toggle Button
+                // Show it if we are idle OR listening (so user can switch if they change their mind)
+                if !isTypingMode && (processingState == .idle || processingState == .listening) {
+                    Button(action: {
+                        // stop listening if we were
+                        if processingState == .listening {
+                            speechRecognizer.stopTranscribing()
+                            processingState = .idle
+                        }
+                        
+                        withAnimation(.spring()) {
+                            isTypingMode = true
+                            isTextFieldFocused = true
+                        }
+                    }) {
+                        Image(systemName: "keyboard")
+                            .font(.system(size: 24))
+                            .foregroundColor(.white.opacity(0.8))
+                            .padding(12)
+                            .background(Circle().fill(Color.black.opacity(0.4)))
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.top, 10)
+                    .transition(.scale)
                 }
             }
         }
         .onAppear {
-            // Auto-start listening when view appears
-            startListening()
+            // Auto-start listening ONLY if not in typing mode (default)
+            // But logic says we start listening on appear. 
+            // If user prefers typing, they can click the keyboard.
+            if !isTypingMode {
+                startListening()
+            }
         }
         .onChange(of: speechRecognizer.error) { newError in
              if let err = newError {
@@ -163,13 +229,29 @@ struct VoiceOverlayView: View {
                 return
             }
             
-            processingState = .processing
-            withAnimation(.linear(duration: 2).repeatForever(autoreverses: false)) {
-                rotation = 360
-            }
-            
-            processWithGemini(transcript: transcript)
+            handleInputProcessing(transcript)
         }
+    }
+    
+    private func submitTypedInput() {
+        guard !typedInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+        
+        // Switch back to "processing" visual state but maybe hide text field?
+        // Or just show processing orb.
+        withAnimation {
+            isTypingMode = false
+        }
+        
+        handleInputProcessing(typedInput)
+    }
+    
+    private func handleInputProcessing(_ input: String) {
+        processingState = .processing
+        withAnimation(.linear(duration: 2).repeatForever(autoreverses: false)) {
+            rotation = 360
+        }
+        
+        processWithGemini(transcript: input)
     }
     
     private func processWithGemini(transcript: String) {
@@ -207,6 +289,8 @@ struct VoiceOverlayView: View {
     private func closeOverlay() {
         // Reset state
         processingState = .idle
+        isTypingMode = false
+        typedInput = ""
         speechRecognizer.stopTranscribing()
         onClose()
     }

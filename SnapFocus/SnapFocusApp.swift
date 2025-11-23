@@ -18,6 +18,11 @@ struct SnapFocusApp: App {
     }
 }
 
+class FloatingPanel: NSPanel {
+    override var canBecomeKey: Bool { true }
+    override var canBecomeMain: Bool { true }
+}
+
 class AppDelegate: NSObject, NSApplicationDelegate {
     var rulerWindow: NSWindow?
     var voiceOverlayWindow: NSWindow?
@@ -102,9 +107,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             .environmentObject(calendarManager) // Pass manager
             
             // Create a centered floating window
-            let window = NSWindow(
+            // IMPORTANT: Use NSPanel or override canBecomeKey to allow keyboard input in borderless window
+            let window = FloatingPanel(
                 contentRect: NSRect(x: 0, y: 0, width: 400, height: 400),
-                styleMask: [.borderless],
+                styleMask: [.borderless, .nonactivatingPanel],
                 backing: .buffered,
                 defer: false
             )
