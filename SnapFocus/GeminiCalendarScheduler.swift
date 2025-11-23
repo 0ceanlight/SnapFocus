@@ -34,14 +34,22 @@ class GeminiCalendarScheduler {
     
     /// Main function to generate and save schedule
     func generateAndSchedule(tasksDescription: String, learningStyle: String) async throws {
+        // Legacy support wrapper
+        let combinedInput = "\(tasksDescription). Learning style: \(learningStyle)"
+        try await generateAndSchedule(userInput: combinedInput)
+    }
+    
+    func generateAndSchedule(userInput: String) async throws {
         
         // 1. Construct the Prompt
         let today = Date()
         let prompt = """
         I need a schedule for today (\(today.formatted())).
         
-        Here is what I need to work on: "\(tasksDescription)"
-        My learning/working style is: "\(learningStyle)" (e.g., if Pomodoro, insert 5m breaks; if Deep Work, do 90m blocks).
+        Here is my request: "\(userInput)"
+        
+        Infer the tasks and any mentioned learning/working style (e.g. Pomodoro, Deep Work).
+        If no style is mentioned, use a continuous flow with short breaks.
         
         Start the schedule from now (\(Date.now.formatted(date: .omitted, time: .shortened))) or the next logical hour.
         
@@ -189,8 +197,7 @@ Task {
     
     do {
         try await scheduler.generateAndSchedule(
-            tasksDescription: "2 hours of SwiftUI coding, 4 hours of studying Japanese history",
-            learningStyle: "Pomodoro (25m work, 5m break)"
+            userInput: "2 hours of SwiftUI coding, 4 hours of studying Japanese history using Pomodoro technique"
         )
     } catch {
         print("Error: \(error)")

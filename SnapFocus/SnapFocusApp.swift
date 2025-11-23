@@ -10,59 +10,122 @@ import SwiftUI
 @main
 struct SnapFocusApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @Environment(\.openURL) var openURL
 
     var body: some Scene {
-        // Main window for the Agentic Scheduler
-        WindowGroup("Agentic Scheduler", id: "agentic-scheduler") {
-            AgenticSchedulerView()
-                .environmentObject(appDelegate.calendarManager)
-        }
-        .handlesExternalEvents(matching: ["snapfocus://scheduler"])
-
-        // This is a bit of a hack to remove the default "new window" command
-        // that shows up when you have a WindowGroup.
         Settings {
             PreferencesView()
         }
-        
-        // Command menu for showing the window
-        .commands {
-            CommandGroup(replacing: .newItem) {
-                // This replaces the "New Item" menu, effectively hiding it.
-            }
-            CommandMenu("Window") {
-                Button("Show Agentic Scheduler") {
-                    openURL(URL(string: "snapfocus://scheduler")!)
-                }
-                .keyboardShortcut("S", modifiers: [.command, .shift])
-            }
-        }
-    }
-    
-    func openScheduler() {
-        openURL(URL(string: "snapfocus://scheduler")!)
     }
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var window: NSWindow?
+    var rulerWindow: NSWindow?
+    var voiceOverlayWindow: NSWindow?
+    var statusItem: NSStatusItem?
+    var settingsWindow: NSWindow? // Keep a reference
+    
     let calendarManager = CalendarManager(calendarName: "SnapFocus")
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Setup Menu Bar
+        setupMenuBar()
+        
+        // Setup Hotkey
+        HotkeyManager.shared.onTrigger = { [weak self] in
+            self?.toggleVoiceOverlay()
+        }
+        HotkeyManager.shared.startMonitoring()
+        
         Task {
-            // First, await the setup and permission request.
+            // Start Calendar Manager
             await calendarManager.start()
             
-            // Now that permissions are handled, set up the UI on the main thread.
             await MainActor.run {
-                // Keep your existing HUD window creation
+                // Create Ruler HUD (Always visible)
                 let ruler = RulerView(cal: calendarManager)
-                window = createFloatingWindow(rootView: ruler)
-                
-                // Open the new scheduler window on launch
-                (NSApp.delegate as? SnapFocusApp)?.openScheduler()
+                rulerWindow = createFloatingWindow(rootView: ruler)
             }
         }
+    }
+    
+    func setupMenuBar() {
+        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        if let button = statusItem?.button {
+            button.image = NSImage(systemSymbolName: "circle.circle", accessibilityDescription: "SnapFocus")
+        }
+        
+        let menu = NSMenu()
+        menu.addItem(NSMenuItem(title: "Preferences...", action: #selector(openPreferences), keyEquivalent: ","))
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: "Quit SnapFocus", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        
+        statusItem?.menu = menu
+    }
+    
+    @objc func openPreferences() {
+        // Manually create the settings window since standard "Settings" scene
+        // can be tricky to activate from a background (LSUIElement) app
+        
+        if settingsWindow == nil {
+            let settingsView = PreferencesView()
+            let window = NSWindow(
+                contentRect: NSRect(x: 0, y: 0, width: 400, height: 200),
+                styleMask: [.titled, .closable, .miniaturizable],
+                backing: .buffered,
+                defer: false
+            )
+            window.center()
+            window.title = "Preferences"
+            window.contentView = NSHostingView(rootView: settingsView)
+            window.isReleasedWhenClosed = false // Keep the window instance alive
+            settingsWindow = window
+        }
+        
+        NSApp.activate(ignoringOtherApps: true)
+        settingsWindow?.makeKeyAndOrderFront(nil)
+    }
+    
+    func toggleVoiceOverlay() {
+        if let window = voiceOverlayWindow, window.isVisible {
+            closeVoiceOverlay()
+        } else {
+            showVoiceOverlay()
+        }
+    }
+    
+    func showVoiceOverlay() {
+        // Create if needed
+        if voiceOverlayWindow == nil {
+            let overlayView = VoiceOverlayView(onClose: { [weak self] in
+                self?.closeVoiceOverlay()
+            })
+            .environmentObject(calendarManager) // Pass manager
+            
+            // Create a centered floating window
+            let window = NSWindow(
+                contentRect: NSRect(x: 0, y: 0, width: 400, height: 400),
+                styleMask: [.borderless],
+                backing: .buffered,
+                defer: false
+            )
+            window.isOpaque = false
+            window.backgroundColor = .clear
+            window.level = .floating
+            window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+            window.center()
+            window.contentView = NSHostingView(rootView: overlayView)
+            
+            voiceOverlayWindow = window
+        }
+        
+        voiceOverlayWindow?.center()
+        voiceOverlayWindow?.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+    }
+    
+    func closeVoiceOverlay() {
+        voiceOverlayWindow?.orderOut(nil)
+        voiceOverlayWindow = nil // Destroy it to reset state? Or keep it? 
+        // Destroying ensures fresh state next time (like "Listening..." prompt)
     }
 }
