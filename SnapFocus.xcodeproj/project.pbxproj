@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		96B061D1FB7841B88DDB78E6 /* VoiceOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB13539DB94446A8CA69B1F /* VoiceOverlayView.swift */; };
+		5E6521A126A2406299A5ADE3 /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DF3C8B9ADF4F449C5314A7 /* HotkeyManager.swift */; };
+		F9B166501AC44CD8926F2D76 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5128D988C18148C9AF06F98E /* SpeechRecognizer.swift */; };
 		1D356CA02ED1FFD60093C8A0 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D356C9F2ED1FFD60093C8A0 /* Models.swift */; };
 		1D811C852ED1B69D004950EF /* SnapFocusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811C842ED1B69D004950EF /* SnapFocusApp.swift */; };
 		1D811C872ED1B69D004950EF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811C862ED1B69D004950EF /* ContentView.swift */; };
@@ -43,6 +46,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0EB13539DB94446A8CA69B1F /* VoiceOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceOverlayView.swift; sourceTree = "<group>"; };
+		47DF3C8B9ADF4F449C5314A7 /* HotkeyManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
+		5128D988C18148C9AF06F98E /* SpeechRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
 		1D356C9F2ED1FFD60093C8A0 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		1D811C812ED1B69D004950EF /* SnapFocus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnapFocus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D811C842ED1B69D004950EF /* SnapFocusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapFocusApp.swift; sourceTree = "<group>"; };
@@ -128,7 +134,10 @@
 				1D811C882ED1B69E004950EF /* Assets.xcassets */,
 				1D811C8D2ED1B69E004950EF /* SnapFocus.entitlements */,
 				1D811C8A2ED1B69E004950EF /* Preview Content */,
-			);
+							0EB13539DB94446A8CA69B1F /* VoiceOverlayView.swift */,
+				47DF3C8B9ADF4F449C5314A7 /* HotkeyManager.swift */,
+				5128D988C18148C9AF06F98E /* SpeechRecognizer.swift */,
+);
 			path = SnapFocus;
 			sourceTree = "<group>";
 		};
@@ -304,7 +313,10 @@
 				1D811CB22ED1BA68004950EF /* RulerView.swift in Sources */,
 				1D811CB42ED1D4B0004950EF /* CalendarManager.swift in Sources */,
 				1DD1C2E02ED26CEE0087A71B /* AgenticSchedulerView.swift in Sources */,
-			);
+							96B061D1FB7841B88DDB78E6 /* VoiceOverlayView.swift in Sources */,
+				5E6521A126A2406299A5ADE3 /* HotkeyManager.swift in Sources */,
+				F9B166501AC44CD8926F2D76 /* SpeechRecognizer.swift in Sources */,
+);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		1D811C8E2ED1B69F004950EF /* Sources */ = {
@@ -468,7 +480,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SnapFocus/Preview Content\"";
-				DEVELOPMENT_TEAM = NNR5X4R6Q9;
+				DEVELOPMENT_TEAM = 3M9KRA7XZQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SnapFocus/Info.plist;
@@ -496,7 +508,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SnapFocus/Preview Content\"";
-				DEVELOPMENT_TEAM = NNR5X4R6Q9;
+				DEVELOPMENT_TEAM = 3M9KRA7XZQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SnapFocus/Info.plist;

@@ -15,5 +15,11 @@
 	</array>
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>To use and manage existing schedules</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>To listen to your schedule commands.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>To hear your voice commands.</string>
+    <key>LSUIElement</key>
+    <true/>
 </dict>
 </plist>
