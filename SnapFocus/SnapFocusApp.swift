@@ -60,6 +60,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         let menu = NSMenu()
+        menu.addItem(NSMenuItem(title: "Toggle Agentic Scheduler", action: #selector(toggleVoiceOverlay), keyEquivalent: "t"))
+        menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Preferences...", action: #selector(openPreferences), keyEquivalent: ","))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit SnapFocus", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
@@ -90,7 +92,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         settingsWindow?.makeKeyAndOrderFront(nil)
     }
     
-    func toggleVoiceOverlay() {
+    @objc func toggleVoiceOverlay() {
         if let window = voiceOverlayWindow, window.isVisible {
             closeVoiceOverlay()
         } else {
