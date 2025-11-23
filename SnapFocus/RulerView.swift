@@ -19,7 +19,6 @@ struct RulerView: View {
     let rulerWidth: CGFloat = 37
     let pixelsPerMinute: CGFloat = 2.0    // tweak: 2 px per minute => 120 px per hour
     let whiteLineRatio: CGFloat = 0.30    // 30% down the screen
-    let labelInset: CGFloat = 8
 
     @State private var now: Date = Date()
     @State private var isHovering = false
@@ -39,13 +38,14 @@ struct RulerView: View {
         let currentWidth: CGFloat = isCollapsed ? collapsedRulerWidth : 300
         
         GeometryReader { geo in
+            let whiteY = geo.size.height * whiteLineRatio // Calculate whiteY here, once for all uses
             ZStack(alignment: .topLeading) {
                 if isCollapsed {
                     // --- COLLAPSED VIEW ---
                     Canvas { context, size in
                         let height = size.height
                         let anchorNow = now
-                        let whiteY = height * whiteLineRatio
+                        // whiteY is now calculated in the GeometryReader scope
 
                         // visible time window
                         let visibleTopSeconds = TimeInterval(-(whiteY / pixelsPerMinute) * 60.0)
@@ -77,7 +77,6 @@ struct RulerView: View {
                     Canvas { context, size in
                         let height = size.height
                         let anchorNow = now
-                        let whiteY = height * whiteLineRatio
                         
                         // visible time window in seconds for clipping
                         let visibleTopSeconds = TimeInterval(-(whiteY / pixelsPerMinute) * 60.0)
@@ -122,7 +121,7 @@ struct RulerView: View {
                             let isHour = (tickComps.minute ?? 0) == 0
 
                             let tickWidth: CGFloat = isHour ? rulerWidth * 0.60 : rulerWidth * 0.30
-                            let tickX: CGFloat = 6
+                            let tickX: CGFloat = 1 // Left padding for ticks
 
                             // tick color: if event covers that moment, show event color
                             var tickColor = Color.gray.opacity(0.7)
@@ -141,7 +140,8 @@ struct RulerView: View {
                                 hourFormatter.dateFormat = "HH:mm"
                                 let label = hourFormatter.string(from: tickTime)
                                 let text = Text(label).font(.caption2).bold().foregroundColor(.white)
-                                context.draw(text, at: CGPoint(x: tickX + tickWidth + 8, y: y - 8), anchor: .leading)
+                                // context.draw(text, at: CGPoint(x: tickX + tickWidth + 2, y: y - 8), anchor: .leading) 
+                                context.draw(text, at: CGPoint(x: tickX + 5, y: y - 8), anchor: .leading)
                             }
 
                             tickTime = tickTime.addingTimeInterval(TimeInterval(stepSeconds))
@@ -213,27 +213,23 @@ struct RulerView: View {
                 }
                 
                 // Current time white line
-                VStack(spacing: 4) {
-                    Spacer().frame(height: geo.size.height * whiteLineRatio)
+                HStack(spacing: 8) { // Replaced VStack with explicit positioning
+                    Rectangle()
+                        .fill(Color.white)
+                        .frame(width: isCollapsed ? collapsedRulerWidth: rulerWidth, height: 2)
+                        .shadow(color: Color.white.opacity(0.9), radius: 2)
 
-                    HStack(spacing: 8) {
-                        Rectangle()
-                            .fill(Color.white)
-                            .frame(width: isCollapsed ? collapsedRulerWidth: rulerWidth, height: 2)
-                            .shadow(color: Color.white.opacity(0.9), radius: 2)
-
-                        if !isCollapsed {
-                             Text(shortTimeString(now))
-                                .font(.caption2).bold()
-                                .foregroundColor(.black)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(Color.white)
-                                .cornerRadius(4)
-                        }
+                    if !isCollapsed {
+                         Text(shortTimeString(now))
+                            .font(.caption2).bold()
+                            .foregroundColor(.black)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color.white)
+                            .cornerRadius(4)
                     }
-                    Spacer()
                 }
+                .offset(y: whiteY - 7) // Position the center of the 2pt line at whiteY (was -1, don't ask)
                 .allowsHitTesting(false)
             }
         }
@@ -302,9 +298,9 @@ struct EventDetailView: View {
                 Image(systemName: "calendar")
                 Text(block.calendarTitle).font(.subheadline)
             }
-            Spacer().frame(height: 8)
-            Button("Jump to start") { }
-            Spacer()
+//            Spacer().frame(height: 8)
+            // Button("Jump to start") { }
+             Spacer()
         }
         .padding()
     }
