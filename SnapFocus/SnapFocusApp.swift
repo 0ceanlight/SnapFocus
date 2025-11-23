@@ -136,4 +136,65 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         voiceOverlayWindow = nil // Destroy it to reset state? Or keep it? 
         // Destroying ensures fresh state next time (like "Listening..." prompt)
     }
+
+    // MARK: - URL Handling
+    func application(_ app: NSApplication, open urls: [URL]) {
+        guard let url = urls.first else { return }
+
+        print("Received URL: \(url)")
+
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
+              let host = components.host else { return }
+
+        switch host {
+        case "rectangle":
+            handleRectangleAction(from: components)
+        case "execute-action":
+            handleExecuteAction(from: components)
+        default:
+            print("Unknown URL host: \(host)")
+        }
+    }
+
+    private func handleRectangleAction(from components: URLComponents) {
+        guard let actionQueryItem = components.queryItems?.first(where: { $0.name == "action" }),
+              let actionName = actionQueryItem.value else {
+            print("Missing 'action' parameter for rectangle host")
+            return
+        }
+        
+        guard let action = RectangleManager.Action(rawValue: actionName) else {
+            print("Unknown rectangle action: \(actionName)")
+            return
+        }
+        
+        print("Executing Rectangle action: \(action)")
+        RectangleManager.execute(action)
+    }
+
+    private func handleExecuteAction(from components: URLComponents) {
+        guard let nameQueryItem = components.queryItems?.first(where: { $0.name == "name" }),
+              let actionName = nameQueryItem.value else {
+            print("Missing 'name' parameter for execute-action host")
+            return
+        }
+
+        switch actionName {
+        case "toggle-scheduler": // Toggles the visibility of the Voice Overlay (aka 'Agentic Scheduler')
+            toggleVoiceOverlay()
+            print("Toggling Voice Overlay via URL.")
+        case "less-time": // Nudges the current task by -5 minutes (shorten)
+            Task { @MainActor in
+                calendarManager.nudgeCurrentTask(byMinutes: -5)
+                print("Nudged current task by -5 minutes via URL.")
+            }
+        case "more-time": // Nudges the current task by +5 minutes (extend)
+            Task { @MainActor in
+                calendarManager.nudgeCurrentTask(byMinutes: 5)
+                print("Nudged current task by +5 minutes via URL.")
+            }
+        default:
+            print("Unknown execute-action name: \(actionName)")
+        }
+    }
 }
