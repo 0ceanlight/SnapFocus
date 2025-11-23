@@ -1,0 +1,50 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode
+build/
+DerivedData/
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcshareddata/
+*.xcworkspace/xcuserdata/
+*.xcuserdatad/
+*.xccheckout
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+Package.pins
+
+# Cocoapods
+Pods/
+
+# Carthage
+Carthage/
+
+# Temporary files
+*.swp
+*.swo
+*.swn
+*.lock
+
+# User-specific files
+*.user
+.idea/
+
+# Secrets (best practice)
+.env
+*.env
+secrets.xcconfig
+*.secrets.xcconfig
+
+# Test results and coverage
+*.xctestrun
+*.xcresult
+*.gcno
+*.gcda
+*.profraw
+code_coverage/
