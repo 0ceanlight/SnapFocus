@@ -2,10 +2,9 @@
 
 A lightweight macOS time-tracking sidebar that syncs with your calendar, visualizes your schedule in real-time, and keeps your current focus in view. A productivity HUD for people who want time to feel tangible.
 
-> **Note:** This project was created as part of the **HackaTUM 2025** in Munich.
+> **Note:** This project was created as part of the [**HackaTUM 2025**](https://hack.tum.de/) in Munich. Watch the trailer [here](https://youtu.be/t5RNpOGzjjI)!
 
-![Screenshot Placeholder](https://via.placeholder.com/800x400.png?text=SnapFocus+App+Screenshot)
-*A visual placeholder for the app in action. Replace with an actual screenshot or GIF.*
+![Screenshot](./Thumbnail.png)
 
 ---
 
