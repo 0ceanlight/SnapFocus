@@ -40,6 +40,7 @@ Carthage/
 *.env
 secrets.xcconfig
 *.secrets.xcconfig
+GeminiKey.txt
 
 # Test results and coverage
 *.xctestrun

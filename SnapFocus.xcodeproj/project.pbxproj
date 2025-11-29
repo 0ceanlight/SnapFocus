@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D2A44B22EDB6B4D00EA5CA9 /* GeminiKey.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1D2A44B12EDB6B4D00EA5CA9 /* GeminiKey.txt */; };
 		1D356CA02ED1FFD60093C8A0 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D356C9F2ED1FFD60093C8A0 /* Models.swift */; };
 		1D811C852ED1B69D004950EF /* SnapFocusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811C842ED1B69D004950EF /* SnapFocusApp.swift */; };
 		1D811C872ED1B69D004950EF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D811C862ED1B69D004950EF /* ContentView.swift */; };
@@ -47,6 +48,7 @@
 
 /* Begin PBXFileReference section */
 		0EB13539DB94446A8CA69B1F /* VoiceOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceOverlayView.swift; sourceTree = "<group>"; };
+		1D2A44B12EDB6B4D00EA5CA9 /* GeminiKey.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GeminiKey.txt; sourceTree = "<group>"; };
 		1D356C9F2ED1FFD60093C8A0 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		1D811C812ED1B69D004950EF /* SnapFocus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnapFocus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D811C842ED1B69D004950EF /* SnapFocusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapFocusApp.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				1D811C8D2ED1B69E004950EF /* SnapFocus.entitlements */,
 				1D811C8A2ED1B69E004950EF /* Preview Content */,
 				0EB13539DB94446A8CA69B1F /* VoiceOverlayView.swift */,
+				1D2A44B12EDB6B4D00EA5CA9 /* GeminiKey.txt */,
 				47DF3C8B9ADF4F449C5314A7 /* HotkeyManager.swift */,
 				5128D988C18148C9AF06F98E /* SpeechRecognizer.swift */,
 			);
@@ -279,6 +282,7 @@
 			files = (
 				1D811C8C2ED1B69E004950EF /* Preview Assets.xcassets in Resources */,
 				1D811C892ED1B69E004950EF /* Assets.xcassets in Resources */,
+				1D2A44B22EDB6B4D00EA5CA9 /* GeminiKey.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -41,6 +41,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         HotkeyManager.shared.startMonitoring()
         
+        // Attempt to load API Key from file (if present)
+        loadAPIKeyFromFile()
+        
         Task {
             // Start Calendar Manager
             await calendarManager.start()
@@ -49,6 +52,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 // Create Ruler HUD (Always visible)
                 let ruler = RulerView(cal: calendarManager)
                 rulerWindow = createFloatingWindow(rootView: ruler)
+            }
+        }
+    }
+    
+    private func loadAPIKeyFromFile() {
+        // Check if GeminiKey.txt exists in the bundle
+        if let fileURL = Bundle.main.url(forResource: "GeminiKey", withExtension: "txt") {
+            do {
+                let content = try String(contentsOf: fileURL, encoding: .utf8)
+                let key = content.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !key.isEmpty {
+                    // Save to UserDefaults so AppStorage picks it up
+                    UserDefaults.standard.set(key, forKey: "gemini_api_key")
+                    print("Loaded Gemini API Key from file.")
+                }
+            } catch {
+                print("Failed to load Gemini API Key from file: \(error)")
             }
         }
     }
