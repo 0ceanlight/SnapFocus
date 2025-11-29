@@ -270,7 +270,7 @@ struct VoiceOverlayView: View {
                     processingState = .success
                     rotation = 0
                     // Refresh calendar
-                    Task { await calendarManager.fetchAndPublishToday() }
+                    Task { await calendarManager.fetchAndPublishEvents() }
                     
                     // Close after delay
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {

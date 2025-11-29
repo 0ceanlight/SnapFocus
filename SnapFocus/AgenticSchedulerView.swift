@@ -132,7 +132,7 @@ struct AgenticSchedulerView: View {
         shiftStatus = "Shifting events..."
         Task { @MainActor in // <-- Added @MainActor here
             do {
-                try await calendarManager.shiftTodaysEvents(by: timeInterval)
+                try await calendarManager.shiftEventsInScope(by: timeInterval)
                 shiftStatus = "✅ Successfully shifted events!"
             } catch {
                 shiftStatus = "Error shifting events: \(error.localizedDescription)"

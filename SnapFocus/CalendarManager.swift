@@ -51,7 +51,7 @@ final class CalendarManager: ObservableObject {
             self.blocks = []
             return
         }
-        await fetchAndPublishToday()
+        await fetchAndPublishEvents()
         setupEventStoreListener()
         setupPeriodicPoll()
     }
@@ -90,7 +90,7 @@ final class CalendarManager: ObservableObject {
             queue: OperationQueue.main
         ) { [weak self] _ in
             Task {
-                await self?.fetchAndPublishToday()
+                await self?.fetchAndPublishEvents()
             }
         }
     }
@@ -100,15 +100,20 @@ final class CalendarManager: ObservableObject {
         stopTimers()
         timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
             Task {
-                await self?.fetchAndPublishToday()
+                await self?.fetchAndPublishEvents()
             }
         }
         RunLoop.main.add(timer!, forMode: .common)
     }
 
-    // MARK: - Fetch only today's events
+    /// Hours to look back for events (default: 12)
+    var fetchBeforeHours: Int = 12
+    /// Hours to look ahead for events (default: 24)
+    var fetchAfterHours: Int = 24
+
+    // MARK: - Fetch events in scope
     @MainActor
-    func fetchAndPublishToday() async {
+    func fetchAndPublishEvents() async {
         // Prevent overwriting local changes if user is currently interacting
         if shiftSession != nil {
             return
@@ -116,8 +121,10 @@ final class CalendarManager: ObservableObject {
 
         let now = Date()
         let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: now)
-        guard let endOfDay = calendar.date(byAdding: DateComponents(day: 1, second: -1), to: startOfDay) else {
+        
+        // Calculate start and end based on configured hours
+        guard let startScope = calendar.date(byAdding: .hour, value: -fetchBeforeHours, to: now),
+              let endScope = calendar.date(byAdding: .hour, value: fetchAfterHours, to: now) else {
             return
         }
 
@@ -128,7 +135,7 @@ final class CalendarManager: ObservableObject {
             return
         }
 
-        let predicate = store.predicateForEvents(withStart: startOfDay, end: endOfDay, calendars: calendars)
+        let predicate = store.predicateForEvents(withStart: startScope, end: endScope, calendars: calendars)
         let events = store.events(matching: predicate)
 
         let newBlocks = EventBlock.assignColorsOrdered(events: events)
@@ -272,20 +279,20 @@ final class CalendarManager: ObservableObject {
                 print("Successfully nudged active task and \(connectedIds.count) future tasks by \(session.currentDeltaMinutes) min.")
                 
                 Task {
-                    await self.fetchAndPublishToday()
+                    await self.fetchAndPublishEvents()
                 }
             } catch {
                 print("Error saving nudged events: \(error.localizedDescription)")
                 Task {
-                    await self.fetchAndPublishToday()
+                    await self.fetchAndPublishEvents()
                 }
             }
         }
     }
 
-    /// Shifts all current events by the specified number of minutes.
+    /// Shifts all events within the configured scope by the specified number of minutes.
     @MainActor
-    func shiftTodaysEvents(by timeInterval: TimeInterval) async throws {
+    func shiftEventsInScope(by timeInterval: TimeInterval) async throws {
         // Prevent accidental overwrites if a shift session is active
         if shiftSession != nil {
             throw NSError(domain: "CalendarManagerError", code: 3, userInfo: [NSLocalizedDescriptionKey: "Cannot bulk shift while an active task is being nudged."])
@@ -293,9 +300,11 @@ final class CalendarManager: ObservableObject {
         
         let now = Date()
         let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: now)
-        guard let endOfDay = calendar.date(byAdding: DateComponents(day: 1, second: -1), to: startOfDay) else {
-            throw NSError(domain: "CalendarManagerError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Could not determine end of day."])
+        
+        // Calculate start and end based on configured hours
+        guard let startScope = calendar.date(byAdding: .hour, value: -fetchBeforeHours, to: now),
+              let endScope = calendar.date(byAdding: .hour, value: fetchAfterHours, to: now) else {
+            throw NSError(domain: "CalendarManagerError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Could not determine scope."])
         }
 
         let calendars = store.calendars(for: .event).filter { $0.title == calendarName }
@@ -303,7 +312,7 @@ final class CalendarManager: ObservableObject {
             throw NSError(domain: "CalendarManagerError", code: 5, userInfo: [NSLocalizedDescriptionKey: "SnapFocus calendar not found. Please create it first."])
         }
 
-        let predicate = store.predicateForEvents(withStart: startOfDay, end: endOfDay, calendars: [snapFocusCalendar])
+        let predicate = store.predicateForEvents(withStart: startScope, end: endScope, calendars: [snapFocusCalendar])
         let events = store.events(matching: predicate)
         
         var eventsToSave: [EKEvent] = []
@@ -324,6 +333,6 @@ final class CalendarManager: ObservableObject {
         print("Successfully shifted \(eventsToSave.count) events by \(timeInterval / 60.0) minutes.")
         
         // Refresh the UI
-        await fetchAndPublishToday()
+        await fetchAndPublishEvents()
     }
 }
