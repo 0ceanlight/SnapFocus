@@ -44,31 +44,33 @@ class GeminiCalendarScheduler {
         // 1. Construct the Prompt
         let today = Date()
         let prompt = """
-        I need a schedule for today (\(today.formatted())).
+        I need a schedule for today (\(today.formatted(date: .abbreviated, time: .omitted))).
+        Current time is: \(Date.now.formatted(date: .omitted, time: .shortened))
         
         Here is my request: "\(userInput)"
         
         Infer the tasks and any mentioned learning/working style (e.g. Pomodoro, Deep Work).
         If no style is mentioned, use a continuous flow with short breaks.
         
-        Start the schedule from now (\(Date.now.formatted(date: .omitted, time: .shortened))) or the next logical hour.
+        Start the schedule from the current time or the next logical slot.
         
         CRITICAL RULES:
-        1. Ensure there are NO overlapping events. Each event must strictly start after the previous one ends.
+        1. Ensure there are NO overlapping events.
         2. Account for the learning style breaks explicitly.
+        3. Use 24-hour format (HH:mm) for start times.
         
         STRICTLY RETURN A JSON ARRAY of objects with these exact fields:
         - title (string)
-        - startISO (string, ISO8601 date-time)
-        - endISO (string, ISO8601 date-time)
+        - startTime (string, HH:mm format, e.g. "14:30")
+        - durationMinutes (int, e.g. 25)
         - notes (string, short description)
         
         Example format:
         [
             {
                 "title": "Task 1",
-                "startISO": "2023-10-27T09:00:00Z",
-                "endISO": "2023-10-27T09:25:00Z",
+                "startTime": "09:00",
+                "durationMinutes": 25,
                 "notes": "Work block"
             }
         ]
@@ -91,11 +93,11 @@ class GeminiCalendarScheduler {
         
         guard let jsonData = cleanJSON.data(using: .utf8) else { return }
         
-        // Custom struct for parsing JSON strings before converting to real Date objects
+        // Custom struct for parsing JSON
         struct RawEvent: Decodable {
             let title: String
-            let startISO: String
-            let endISO: String
+            let startTime: String
+            let durationMinutes: Int
             let notes: String
         }
         
@@ -104,33 +106,27 @@ class GeminiCalendarScheduler {
         // 4. Add to Calendar
         try await requestCalendarAccess()
         let calendar = try await getOrCreateSnapFocusCalendar()
-
-        // Standard ISO8601 formatter
-        let isoFormatter = ISO8601DateFormatter()
-        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         
-        // Fallback formatter without fractional seconds
-        let simpleIsoFormatter = ISO8601DateFormatter()
-        simpleIsoFormatter.formatOptions = [.withInternetDateTime]
+        let calendarSys = Calendar.current
         
         for event in rawEvents {
-            // Flexible date parsing strategy
-            var start: Date? = isoFormatter.date(from: event.startISO)
-            if start == nil {
-                start = simpleIsoFormatter.date(from: event.startISO)
-            }
-            
-            var end: Date? = isoFormatter.date(from: event.endISO)
-            if end == nil {
-                end = simpleIsoFormatter.date(from: event.endISO)
-            }
-            
-            guard let validStart = start, let validEnd = end else {
-                print("⚠️ Skipping event due to date format error: \(event.title) (Start: \(event.startISO), End: \(event.endISO))")
+            // Parse HH:mm
+            let timeComponents = event.startTime.split(separator: ":")
+            guard timeComponents.count == 2,
+                  let hour = Int(timeComponents[0]),
+                  let minute = Int(timeComponents[1]) else {
+                print("⚠️ Skipping event due to invalid time format: \(event.startTime)")
                 continue
             }
             
-            try saveEventToCalendar(title: event.title, start: validStart, end: validEnd, notes: event.notes, to: calendar)
+            // Construct Date from Today + HH:mm
+            guard let start = calendarSys.date(bySettingHour: hour, minute: minute, second: 0, of: today) else {
+                continue
+            }
+            
+            let end = calendarSys.date(byAdding: .minute, value: event.durationMinutes, to: start) ?? start.addingTimeInterval(Double(event.durationMinutes) * 60)
+            
+            try saveEventToCalendar(title: event.title, start: start, end: end, notes: event.notes, to: calendar)
         }
         
         print("✅ Success! \(rawEvents.count) events added to your calendar.")
