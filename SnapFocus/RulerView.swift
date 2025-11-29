@@ -35,7 +35,7 @@ struct RulerView: View {
 
     var body: some View {
         let isCollapsed = enableHoverFeature && !isHovering
-        let currentWidth: CGFloat = isCollapsed ? collapsedRulerWidth : 300
+        let currentWidth: CGFloat = isCollapsed ? collapsedRulerWidth : 230
         
         GeometryReader { geo in
             let whiteY = geo.size.height * whiteLineRatio // Calculate whiteY here, once for all uses
@@ -94,8 +94,8 @@ struct RulerView: View {
 
                             let rect = CGRect(x: 0, y: yStart, width: rulerWidth, height: max(1, yEnd - yStart))
 
-                            context.fill(Path(rect), with: .color(block.color.opacity(0.18)))
-                            context.stroke(Path(rect), with: .color(block.color.opacity(0.35)), lineWidth: 1.0)
+                            context.fill(Path(rect), with: .color(block.color.opacity(0.48)))
+                            context.stroke(Path(rect), with: .color(block.color.opacity(0.55)), lineWidth: 1.0)
                         }
 
                         // ticks: aligned to nearest 15-min mark covering visible range
@@ -148,7 +148,7 @@ struct RulerView: View {
                         }
 
                         if cal.blocks.isEmpty {
-                            context.fill(Path(CGRect(x: 0, y: 0, width: rulerWidth, height: height)), with: .color(Color.gray.opacity(0.06)))
+                            context.fill(Path(CGRect(x: 0, y: 0, width: rulerWidth, height: height)), with: .color(Color.gray.opacity(0.26)))
                         }
 
                         var edgePath = Path(CGRect(x: rulerWidth - 1, y: 0, width: 1, height: height))
@@ -184,7 +184,7 @@ struct RulerView: View {
                                 }
                                 .padding(.vertical, 4)
                                 .padding(.horizontal, 6)
-                                .background(Color.black.opacity(0.35))
+                                .background(Color.gray.opacity(0.75))
                                 .cornerRadius(6)
                             }
                             .buttonStyle(.plain)
